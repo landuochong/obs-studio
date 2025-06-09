@@ -63,6 +63,7 @@ bool obs_display_init(struct obs_display *display, const struct gs_init_data *gr
 	return true;
 }
 
+//whb:创建obs_display,关联ui窗口
 obs_display_t *obs_display_create(const struct gs_init_data *graphics_data, uint32_t background_color)
 {
 	struct obs_display *display = bzalloc(sizeof(struct obs_display));
@@ -75,6 +76,7 @@ obs_display_t *obs_display_create(const struct gs_init_data *graphics_data, uint
 		obs_display_destroy(display);
 		display = NULL;
 	} else {
+		//whb:放到链表第一个位置
 		pthread_mutex_lock(&obs->data.displays_mutex);
 		display->prev_next = &obs->data.first_display;
 		display->next = obs->data.first_display;

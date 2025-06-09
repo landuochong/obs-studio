@@ -283,7 +283,7 @@ void OBSBasicSourceSelect::on_buttonBox_accepted()
 		OBSSceneItem item;
 		if (!AddNew(this, id, QT_TO_UTF8(ui->sourceName->text()), visible, newSource, item))
 			return;
-
+        //whb:添加一个源
 		OBSBasic *main = OBSBasic::Get();
 		std::string scene_name = obs_source_get_name(main->GetCurrentSceneSource());
 		auto undo = [scene_name, main](const std::string &data) {

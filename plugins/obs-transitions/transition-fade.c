@@ -142,7 +142,7 @@ struct obs_source_info fade_transition = {
 	.get_name = fade_get_name,
 	.create = fade_create,
 	.destroy = fade_destroy,
-	.video_render = fade_video_render,
+	.video_render = fade_video_render, //source渲染
 	.audio_render = fade_audio_render,
 	.video_get_color_space = fade_video_get_color_space,
 };

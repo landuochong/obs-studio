@@ -2112,7 +2112,7 @@ void OBSBasicPreview::DrawOverflow()
 	if (scene) {
 		gs_matrix_push();
 		gs_matrix_scale3f(main->previewScale, main->previewScale, 1.0f);
-		obs_scene_enum_items(scene, DrawSelectedOverflow, this);
+		//obs_scene_enum_items(scene, DrawSelectedOverflow, this);
 		gs_matrix_pop();
 	}
 

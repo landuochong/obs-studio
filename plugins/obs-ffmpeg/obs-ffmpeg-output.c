@@ -1151,6 +1151,7 @@ static uint64_t ffmpeg_output_total_bytes(void *data)
 	return output->total_bytes;
 }
 
+//whb:ffmpeg output
 struct obs_output_info ffmpeg_output = {
 	.id = "ffmpeg_output",
 	.flags = OBS_OUTPUT_AUDIO | OBS_OUTPUT_VIDEO | OBS_OUTPUT_MULTI_TRACK | OBS_OUTPUT_CAN_PAUSE,

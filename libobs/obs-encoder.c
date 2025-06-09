@@ -308,6 +308,7 @@ static void maybe_set_up_gpu_rescale(struct obs_encoder *encoder)
 	pthread_mutex_unlock(&obs->video.mixes_mutex);
 }
 
+//whb:连接编码器和视频
 static void add_connection(struct obs_encoder *encoder)
 {
 	if (encoder->info.type == OBS_ENCODER_AUDIO) {

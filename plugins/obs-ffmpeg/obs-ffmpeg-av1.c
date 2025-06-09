@@ -317,6 +317,7 @@ static bool av1_extra_data(void *data, uint8_t **extra_data, size_t *size)
 	return true;
 }
 
+//whb:encoder svt_av1
 struct obs_encoder_info svt_av1_encoder_info = {
 	.id = "ffmpeg_svt_av1",
 	.type = OBS_ENCODER_VIDEO,
@@ -331,6 +332,7 @@ struct obs_encoder_info svt_av1_encoder_info = {
 	.get_video_info = av1_video_info,
 };
 
+//whb:encoder aom_av1
 struct obs_encoder_info aom_av1_encoder_info = {
 	.id = "ffmpeg_aom_av1",
 	.type = OBS_ENCODER_VIDEO,

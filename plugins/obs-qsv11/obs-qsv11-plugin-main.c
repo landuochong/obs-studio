@@ -76,6 +76,7 @@ extern struct obs_encoder_info obs_qsv_hevc_encoder;
 bool obs_module_load(void)
 {
 	adapter_count = MAX_ADAPTERS;
+	//whb:设备检测
 	check_adapters(adapters, &adapter_count);
 
 	bool avc_supported = false;
@@ -88,16 +89,18 @@ bool obs_module_load(void)
 		hevc_supported |= adapter->is_intel && adapter->supports_hevc;
 	}
 
-	if (avc_supported) {
+	if (avc_supported) {//
 		obs_register_encoder(&obs_qsv_encoder_tex_v2);
 		obs_register_encoder(&obs_qsv_encoder_tex);
 		obs_register_encoder(&obs_qsv_encoder_v2);
 		obs_register_encoder(&obs_qsv_encoder);
 	}
+
 	if (av1_supported) {
 		obs_register_encoder(&obs_qsv_av1_encoder_tex);
 		obs_register_encoder(&obs_qsv_av1_encoder);
 	}
+
 #if ENABLE_HEVC
 	if (hevc_supported) {
 		obs_register_encoder(&obs_qsv_hevc_encoder_tex);

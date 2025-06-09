@@ -74,10 +74,11 @@ static uint64_t tick_sources(uint64_t cur_time, uint64_t last_time)
 
 	/* ------------------------------------- */
 	/* call the tick function of each source */
-
+        //whb:遍历所有source: trans, fad, scene, ...
 	for (size_t i = 0; i < data->sources_to_tick.num; i++) {
 		obs_source_t *s = data->sources_to_tick.array[i];
 		const uint64_t start = source_profiler_source_tick_start();
+		//whb:检查了UI存储的show_refs和activate_refs，修改active状态后只更新了临时值，在video RenderThread 中才实际更新source
 		obs_source_video_tick(s, seconds);
 		source_profiler_source_tick_end(s, start);
 		obs_source_release(s);
@@ -102,7 +103,7 @@ static inline void render_displays(void)
 	pthread_mutex_lock(&obs->data.displays_mutex);
 
 	display = obs->data.first_display;
-	while (display) {
+	while (display) {//whb:渲染每一个display
 		render_display(display);
 		display = display->next;
 	}
@@ -177,7 +178,8 @@ static inline void render_main_texture(struct obs_core_video_mix *video)
 
 	struct vec4 clear_color;
 	vec4_set(&clear_color, 0.0f, 0.0f, 0.0f, 0.0f);
-
+    //whb: 这里是第一个重点，屏幕渲染到哪里，这里明确给了答案，在video->render_texture
+    //材质格式是gs_texture_t
 	gs_set_render_target_with_color_space(video->render_texture, NULL, video->render_space);
 	gs_clear(GS_CLEAR_COLOR, &clear_color, 1.0f, 0);
 
@@ -534,6 +536,7 @@ end:
 	profile_end(output_gpu_encoders_name);
 }
 
+//whb:渲染所有source 保存画布数据 更新下次渲染纹理的索引
 static inline void render_video(struct obs_core_video_mix *video, bool raw_active, const bool gpu_active,
 				int cur_texture)
 {
@@ -541,13 +544,18 @@ static inline void render_video(struct obs_core_video_mix *video, bool raw_activ
 
 	gs_enable_depth_test(false);
 	gs_set_cull_mode(GS_NEITHER);
-
+        //whb:渲染所有source到texture,
 	render_main_texture(video);
 
 	if (raw_active || gpu_active) {
 		gs_texture_t *const *convert_textures = video->convert_textures;
 		gs_stagesurf_t *const *copy_surfaces = video->copy_surfaces[cur_texture];
 		size_t channel_count = NUM_CHANNELS;
+
+		//whb:将画布上的数据拷贝到纹理中, 此处格式是GS_RGBA
+		// 画布对象是struct obs_core_video::render_texture
+		// 如果画布宽高和output宽高一致，则返回的是obs_core_video::render_texture，
+		// 否则在obs_core_video::output_texture对render_texture做缩放后 返回output_texture
 		gs_texture_t *output_texture = render_output_texture(video);
 
 		if (gpu_active) {
@@ -568,6 +576,9 @@ static inline void render_video(struct obs_core_video_mix *video, bool raw_activ
 			output_gpu_encoders(video, raw_active);
 		}
 
+		//whb:如果有录像或直播 将GPU转换后的纹理保存下来
+		// GPU转换后的纹理 存储在struct obs_core_video::convert_textures
+		// 数据保存在obs_core_video::copy_surfaces
 		if (raw_active) {
 			stage_output_texture(video, cur_texture, convert_textures, output_texture, copy_surfaces,
 					     channel_count);
@@ -781,7 +792,7 @@ static inline void output_video_data(struct obs_core_video_mix *video, struct vi
 	bool locked;
 
 	info = video_output_get_info(video->video);
-
+    //查找根结点，并获取锁
 	locked = video_output_lock_frame(video->video, &output_frame, count, input_frame->timestamp);
 	if (locked) {
 		if (video->gpu_conversion) {
@@ -789,7 +800,7 @@ static inline void output_video_data(struct obs_core_video_mix *video, struct vi
 		} else {
 			copy_rgbx_frame(&output_frame, input_frame, info);
 		}
-
+                //触发信号量 通知video_thread线程可以取数据了
 		video_output_unlock_frame(video->video);
 	}
 }
@@ -865,6 +876,7 @@ static const char *output_frame_render_video_name = "render_video";
 static const char *output_frame_download_frame_name = "download_frame";
 static const char *output_frame_gs_flush_name = "gs_flush";
 static const char *output_frame_output_video_data_name = "output_video_data";
+//whb:处理一路流
 static inline void output_frame(struct obs_core_video_mix *video)
 {
 	const bool raw_active = video->raw_was_active;
@@ -886,8 +898,9 @@ static inline void output_frame(struct obs_core_video_mix *video)
 	GS_DEBUG_MARKER_END();
 	profile_end(output_frame_render_video_name);
 
-	if (raw_active) {
+	if (raw_active) {//whb: 当有推流或录像的时候 该值是true
 		profile_start(output_frame_download_frame_name);
+		// 填充frame::data, frame::linesize
 		frame_ready = download_frame(video, prev_texture, &frame);
 		profile_end(output_frame_download_frame_name);
 	}
@@ -905,6 +918,7 @@ static inline void output_frame(struct obs_core_video_mix *video)
 
 		frame.timestamp = vframe_info.timestamp;
 		profile_start(output_frame_output_video_data_name);
+		//whb:触发信号量 通知video_thread线程可以取数据了
 		output_video_data(video, &frame, vframe_info.count);
 		profile_end(output_frame_output_video_data_name);
 	}
@@ -913,12 +927,13 @@ static inline void output_frame(struct obs_core_video_mix *video)
 		video->cur_texture = 0;
 }
 
+//whb:混流处理
 static inline void output_frames(void)
 {
 	pthread_mutex_lock(&obs->video.mixes_mutex);
 	for (size_t i = 0, num = obs->video.mixes.num; i < num; i++) {
 		struct obs_core_video_mix *mix = obs->video.mixes.array[i];
-		if (mix->view) {
+		if (mix->view) {//处理一路流
 			output_frame(mix);
 		} else {
 			obs->video.mixes.array[i] = NULL;
@@ -1126,7 +1141,9 @@ bool obs_graphics_thread_loop(struct obs_graphics_context *context)
 	profile_end(output_frame_name);
 
 	profile_start(render_displays_name);
+	//whb:渲染到UI
 	render_displays();
+
 	profile_end(render_displays_name);
 	source_profiler_render_end();
 

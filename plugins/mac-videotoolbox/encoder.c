@@ -1436,6 +1436,7 @@ bool obs_module_load(void)
 
 void obs_module_post_load(void)
 {
+	//whb:encoder mac-videotoolbox
 	struct obs_encoder_info info = {
 		.type = OBS_ENCODER_VIDEO,
 		.get_name = vt_getname,

@@ -115,23 +115,30 @@ void obs_view_set_source(obs_view_t *view, uint32_t channel, obs_source_t *sourc
 	}
 }
 
+//whb:渲染view
 void obs_view_render(obs_view_t *view)
 {
 	if (!view)
 		return;
 
 	pthread_mutex_lock(&view->channels_mutex);
-
+        //多个源渲染
 	for (size_t i = 0; i < MAX_CHANNELS; i++) {
 		struct obs_source *source;
 
-		source = view->channels[i];
+		source = view->channels[i];//fade_transition
 
 		if (source) {
 			if (source->removed) {
 				obs_source_release(source);
 				view->channels[i] = NULL;
 			} else {
+				//默认情况下 每次循环此处逻辑会进入三次
+				// 一次是当前应用的transition source
+				// 一次是OBS自动添加的was output audio (desktop audio)
+				// 一次是OBS自动添加的was input audio（麦克风）
+				// 但是后两个audio的channel 在调用obs_source_video_render时什么都不会做 直接return
+				// 而transition source则会触发渲染当前scene 或做两个scene的转场
 				obs_source_video_render(source);
 			}
 		}
@@ -157,6 +164,7 @@ video_t *obs_view_add(obs_view_t *view)
 	return obs_view_add2(view, &obs->data.main_canvas->mix->ovi);
 }
 
+//whb: 添加view
 video_t *obs_view_add2(obs_view_t *view, struct obs_video_info *ovi)
 {
 	if (!view || !ovi)

@@ -1236,7 +1236,9 @@ static bool obs_init(const char *locale, const char *module_config_path, profile
 	if (module_config_path)
 		obs->module_config_path = bstrdup(module_config_path);
 	obs->locale = bstrdup(locale);
+	//whb:注册scene
 	obs_register_source(&scene_info);
+	//whb:注册group
 	obs_register_source(&group_info);
 	obs_register_source(&audio_line_info);
 	add_default_module_paths();
@@ -1479,7 +1481,7 @@ static inline bool size_valid(uint32_t width, uint32_t height)
 {
 	return (width >= OBS_SIZE_MIN && height >= OBS_SIZE_MIN && width <= OBS_SIZE_MAX && height <= OBS_SIZE_MAX);
 }
-
+//whb:init
 int obs_reset_video(struct obs_video_info *ovi)
 {
 	if (!obs)
@@ -3043,6 +3045,7 @@ struct obs_core_video_mix *get_mix_for_video(video_t *v)
 	return result;
 }
 
+//whb:编码或者混流输出可以通过这个获取原始数据
 void start_raw_video(video_t *v, const struct video_scale_info *conversion, uint32_t frame_rate_divisor,
 		     void (*callback)(void *param, struct video_data *frame), void *param)
 {
@@ -3062,6 +3065,7 @@ void stop_raw_video(video_t *v, void (*callback)(void *param, struct video_data 
 		os_atomic_dec_long(&video->raw_active);
 }
 
+//暂时没有使用
 void obs_add_raw_video_callback(const struct video_scale_info *conversion,
 				void (*callback)(void *param, struct video_data *frame), void *param)
 {

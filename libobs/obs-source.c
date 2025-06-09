@@ -2616,6 +2616,7 @@ static uint32_t get_base_height(const obs_source_t *source)
 	return source->async_active ? get_async_height(source) : 0;
 }
 
+//whb:渲染源
 static void source_render(obs_source_t *source, gs_effect_t *effect)
 {
 	gs_timer_t *timer = NULL;
@@ -2795,6 +2796,7 @@ static const char *get_type_format(enum obs_source_type type)
 }
 #endif
 
+//whb:渲染source
 static inline void render_video(obs_source_t *source)
 {
 	if (source->info.type != OBS_SOURCE_TYPE_FILTER && (source->info.output_flags & OBS_SOURCE_VIDEO) == 0) {
@@ -2823,7 +2825,7 @@ static inline void render_video(obs_source_t *source)
 		obs_source_render_filters(source);
 
 	else if (source->info.video_render)
-		obs_source_main_render(source);
+		obs_source_main_render(source);//遍历和渲染窗口
 
 	else if (source->filter_target)
 		obs_source_video_render(source->filter_target);
@@ -2832,10 +2834,11 @@ static inline void render_video(obs_source_t *source)
 		deinterlace_render(source);
 
 	else
-		obs_source_render_async_video(source);
+		obs_source_render_async_video(source); //摄像头数据
 
 	GS_DEBUG_MARKER_END();
 }
+
 
 void obs_source_video_render(obs_source_t *source)
 {
@@ -2965,6 +2968,7 @@ static bool filter_compatible(obs_source_t *source, obs_source_t *filter)
 	return (s_caps & f_caps) == f_caps;
 }
 
+//whb:添加滤镜
 void obs_source_filter_add(obs_source_t *source, obs_source_t *filter)
 {
 	struct calldata cd;

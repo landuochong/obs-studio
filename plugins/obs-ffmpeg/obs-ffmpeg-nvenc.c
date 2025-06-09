@@ -574,6 +574,7 @@ static bool nvenc_sei_data(void *data, uint8_t **extra_data, size_t *size)
 	return true;
 }
 
+//whb:encoder nvenc_264
 struct obs_encoder_info h264_nvenc_encoder_info = {
 	.id = "ffmpeg_nvenc",
 	.type = OBS_ENCODER_VIDEO,
@@ -592,6 +593,7 @@ struct obs_encoder_info h264_nvenc_encoder_info = {
 };
 
 #ifdef ENABLE_HEVC
+//whb:encoder nvenc_265
 struct obs_encoder_info hevc_nvenc_encoder_info = {
 	.id = "ffmpeg_hevc_nvenc",
 	.type = OBS_ENCODER_VIDEO,

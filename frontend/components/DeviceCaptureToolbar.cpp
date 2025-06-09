@@ -53,6 +53,6 @@ void DeviceCaptureToolbar::on_activateButton_clicked()
 	calldata_t cd = {};
 	calldata_set_bool(&cd, "active", active);
 	proc_handler_t *ph = obs_source_get_proc_handler(source);
-	proc_handler_call(ph, "activate", &cd);
+	proc_handler_call(ph, "activate", &cd);//whb: active
 	calldata_free(&cd);
 }

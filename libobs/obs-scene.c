@@ -1057,6 +1057,7 @@ static inline bool scene_size_changed(obs_scene_t *scene)
 	return true;
 }
 
+//whb:遍历和渲染scene的每个source
 static void scene_video_render(void *data, gs_effect_t *effect)
 {
 	obs_scene_item_ptr_array_t remove_items;
@@ -1078,7 +1079,7 @@ static void scene_video_render(void *data, gs_effect_t *effect)
 	item = scene->first_item;
 	while (item) {
 		if (item->user_visible || transition_active(item->hide_transition))
-			render_item(item);
+			render_item(item);// 会调到video_render
 
 		item = item->next;
 	}
@@ -2461,6 +2462,7 @@ release_source_and_fail:
 	return NULL;
 }
 
+//whb:添加scene
 obs_sceneitem_t *obs_scene_add(obs_scene_t *scene, obs_source_t *source)
 {
 	obs_sceneitem_t *item = obs_scene_add_internal(scene, source, NULL, 0);

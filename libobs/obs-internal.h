@@ -237,11 +237,13 @@ struct obs_display {
 	bool update_color_space;
 	bool enabled;
 	uint32_t cx, cy;
+	//?
 	uint32_t next_cx, next_cy;
 	uint32_t background_color;
 	gs_swapchain_t *swap;
 	pthread_mutex_t draw_callbacks_mutex;
 	pthread_mutex_t draw_info_mutex;
+	//whb:关联数据回调，用于display的渲染
 	DARRAY(struct draw_callback) draw_callbacks;
 	bool use_clear_workaround;
 
@@ -276,7 +278,7 @@ struct obs_task_info {
 };
 
 struct obs_core_video_mix {
-	struct obs_view *view;
+	struct obs_view *view;//源
 
 	gs_stagesurf_t *active_copy_surfaces[NUM_TEXTURES][NUM_CHANNELS];
 	gs_stagesurf_t *copy_surfaces[NUM_TEXTURES][NUM_CHANNELS];
@@ -285,6 +287,7 @@ struct obs_core_video_mix {
 #ifdef _WIN32
 	gs_stagesurf_t *copy_surfaces_encode[NUM_TEXTURES];
 #endif
+
 	gs_texture_t *render_texture;
 	gs_texture_t *output_texture;
 	enum gs_color_space render_space;
@@ -408,6 +411,7 @@ struct obs_core_audio {
 };
 
 /* user sources, output channels, and displays */
+//whb:obs_core_data结构
 struct obs_core_data {
 	/* Hash tables (uthash) */
 	struct obs_source *sources;        /* Lookup by UUID (hh_uuid) */
@@ -485,15 +489,21 @@ struct obs_core_hotkeys {
 
 typedef DARRAY(struct obs_source_info) obs_source_info_array_t;
 
+//whb:obs_core结构
 struct obs_core {
 	struct obs_module *first_module;
 	DARRAY(struct obs_module_path) module_paths;
 	DARRAY(char *) safe_modules;
 
+	//存储所有源
 	obs_source_info_array_t source_types;
+        //输入：如摄像头，屏幕，等source放到这个结构里
 	obs_source_info_array_t input_types;
+
 	obs_source_info_array_t filter_types;
+
 	obs_source_info_array_t transition_types;
+
 	DARRAY(struct obs_output_info) output_types;
 	DARRAY(struct obs_encoder_info) encoder_types;
 	DARRAY(struct obs_service_info) service_types;
@@ -508,9 +518,10 @@ struct obs_core {
 
 	/* segmented into multiple sub-structures to keep things a bit more
 	 * clean and organized */
-	struct obs_core_video video;
+	struct obs_core_video video; //whb: 视频流结构
 	struct obs_core_audio audio;
 	struct obs_core_data data;
+
 	struct obs_core_hotkeys hotkeys;
 
 	os_task_queue_t *destruction_task_thread;

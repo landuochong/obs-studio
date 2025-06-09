@@ -1289,6 +1289,7 @@ static bool obs_qsv_encode_tex(void *data, struct encoder_texture *tex, int64_t 
 	return true;
 }
 
+//whb:encoder qsv_264
 struct obs_encoder_info obs_qsv_encoder_tex = {
 	.id = "obs_qsv11",
 	.type = OBS_ENCODER_VIDEO,
@@ -1357,6 +1358,7 @@ struct obs_encoder_info obs_qsv_encoder_v2 = {
 	.caps = OBS_ENCODER_CAP_DYN_BITRATE | OBS_ENCODER_CAP_INTERNAL | OBS_ENCODER_CAP_ROI,
 };
 
+//whb:encoder qsv_av1
 struct obs_encoder_info obs_qsv_av1_encoder_tex = {
 	.id = "obs_qsv11_av1",
 	.type = OBS_ENCODER_VIDEO,
@@ -1389,6 +1391,7 @@ struct obs_encoder_info obs_qsv_av1_encoder = {
 	.caps = OBS_ENCODER_CAP_DYN_BITRATE | OBS_ENCODER_CAP_INTERNAL | OBS_ENCODER_CAP_ROI,
 };
 
+//whb:encoder qsv_265
 struct obs_encoder_info obs_qsv_hevc_encoder_tex = {
 	.id = "obs_qsv11_hevc",
 	.type = OBS_ENCODER_VIDEO,

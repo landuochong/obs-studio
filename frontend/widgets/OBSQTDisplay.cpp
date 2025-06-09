@@ -146,7 +146,7 @@ void OBSQTDisplay::CreateDisplay()
 	info.cy = size.height();
 	info.format = GS_BGRA;
 	info.zsformat = GS_ZS_NONE;
-
+        //whb:获取窗口id
 	if (!QTToGSWindow(windowHandle(), info.window))
 		return;
 

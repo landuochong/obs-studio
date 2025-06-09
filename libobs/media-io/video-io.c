@@ -67,18 +67,22 @@ static inline void video_input_free(struct video_input *input)
 	video_scaler_destroy(input->scaler);
 }
 
+//whb: 视频输出数据定义
 struct video_output {
+	//视频输出设定info
 	struct video_output_info info;
-
+        //视频输出线程地址
 	pthread_t thread;
 	pthread_mutex_t data_mutex;
 	bool stop;
 
+	//信号量
 	os_sem_t *update_semaphore;
 	uint64_t frame_time;
 	volatile long skipped_frames;
 	volatile long total_frames;
 
+	//视频来源信息
 	pthread_mutex_t input_mutex;
 	DARRAY(struct video_input) inputs;
 

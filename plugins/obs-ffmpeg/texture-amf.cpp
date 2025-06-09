@@ -1670,6 +1670,7 @@ try {
 	return nullptr;
 }
 
+//whb:encoder amf encoder
 static void register_avc()
 {
 	struct obs_encoder_info amf_encoder_info = {};

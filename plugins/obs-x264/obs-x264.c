@@ -847,6 +847,7 @@ static void obs_x264_video_info(void *data, struct video_scale_info *info)
 	info->format = pref_format;
 }
 
+//whb:encoder x264
 struct obs_encoder_info obs_x264_encoder = {
 	.id = "obs_x264",
 	.type = OBS_ENCODER_VIDEO,

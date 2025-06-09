@@ -456,6 +456,7 @@ static size_t enc_frame_size(void *data)
 	return enc->frame_size;
 }
 
+//whb:audioencoder
 struct obs_encoder_info aac_encoder_info = {
 	.id = "ffmpeg_aac",
 	.type = OBS_ENCODER_AUDIO,

@@ -1203,6 +1203,7 @@ static bool vaapi_sei_data(void *data, uint8_t **extra_data, size_t *size)
 	return true;
 }
 
+//whb:encoder vaapi_264
 struct obs_encoder_info h264_vaapi_encoder_info = {
 	.id = "ffmpeg_vaapi",
 	.type = OBS_ENCODER_VIDEO,
@@ -1235,6 +1236,7 @@ struct obs_encoder_info h264_vaapi_encoder_tex_info = {
 	.caps = OBS_ENCODER_CAP_PASS_TEXTURE,
 };
 
+//whb:encoder vaapi_av1
 struct obs_encoder_info av1_vaapi_encoder_info = {
 	.id = "av1_ffmpeg_vaapi",
 	.type = OBS_ENCODER_VIDEO,
@@ -1268,6 +1270,7 @@ struct obs_encoder_info av1_vaapi_encoder_tex_info = {
 };
 
 #ifdef ENABLE_HEVC
+//whb:encoder vaapi_265
 struct obs_encoder_info hevc_vaapi_encoder_info = {
 	.id = "hevc_ffmpeg_vaapi",
 	.type = OBS_ENCODER_VIDEO,

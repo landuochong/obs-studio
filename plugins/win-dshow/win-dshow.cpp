@@ -514,6 +514,7 @@ void DShowInput::OnReactivate()
 	SetActive(true);
 }
 
+//whb:编码数据
 void DShowInput::OnVideoData(const VideoConfig &config, unsigned char *data, size_t size, long long startTime,
 			     long long endTime, long rotation)
 {

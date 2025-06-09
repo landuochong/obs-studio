@@ -2417,7 +2417,7 @@ static void hook_data_capture(struct obs_output *output)
 	bool has_video = flag_video(output);
 	bool has_audio = flag_audio(output);
 
-	if (flag_encoded(output)) {
+	if (flag_encoded(output)) {//whb:需要编码
 		pthread_mutex_lock(&output->interleaved_mutex);
 		reset_packet_data(output);
 		pthread_mutex_unlock(&output->interleaved_mutex);
@@ -2441,7 +2441,7 @@ static void hook_data_capture(struct obs_output *output)
 			start_audio_encoders(output, encoded_callback);
 		if (has_video)
 			start_video_encoders(output, encoded_callback);
-	} else {
+	} else {//不编码
 		if (has_video)
 			start_raw_video(output->video, obs_output_get_video_conversion(output), 1,
 					default_raw_video_callback, output);

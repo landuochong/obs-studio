@@ -1285,6 +1285,7 @@ static bool nvenc_sei_data(void *data, uint8_t **sei, size_t *size)
 	return true;
 }
 
+//whb:encoder gpu nvenc 264
 struct obs_encoder_info h264_nvenc_info = {
 	.id = "obs_nvenc_h264_tex",
 	.codec = "h264",
@@ -1306,6 +1307,7 @@ struct obs_encoder_info h264_nvenc_info = {
 };
 
 #ifdef ENABLE_HEVC
+//whb:encoder gpu nvenc 265
 struct obs_encoder_info hevc_nvenc_info = {
 	.id = "obs_nvenc_hevc_tex",
 	.codec = "hevc",
@@ -1327,6 +1329,7 @@ struct obs_encoder_info hevc_nvenc_info = {
 };
 #endif
 
+//whb:encoder gpu nvenc av1
 struct obs_encoder_info av1_nvenc_info = {
 	.id = "obs_nvenc_av1_tex",
 	.codec = "av1",
@@ -1346,6 +1349,7 @@ struct obs_encoder_info av1_nvenc_info = {
 	.get_extra_data = nvenc_extra_data,
 };
 
+//whb:encoder nvenc_cuda 264
 struct obs_encoder_info h264_nvenc_soft_info = {
 	.id = "obs_nvenc_h264_soft",
 	.codec = "h264",
@@ -1364,6 +1368,7 @@ struct obs_encoder_info h264_nvenc_soft_info = {
 };
 
 #ifdef ENABLE_HEVC
+//whb:encoder nvenc_cuda 265
 struct obs_encoder_info hevc_nvenc_soft_info = {
 	.id = "obs_nvenc_hevc_soft",
 	.codec = "hevc",
@@ -1382,6 +1387,7 @@ struct obs_encoder_info hevc_nvenc_soft_info = {
 };
 #endif
 
+//whb:encoder nvenc_av1
 struct obs_encoder_info av1_nvenc_soft_info = {
 	.id = "obs_nvenc_av1_soft",
 	.codec = "av1",

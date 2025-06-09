@@ -725,7 +725,7 @@ void obs_transition_video_render2(obs_source_t *transition, obs_transition_video
 		if (state.s[0]) {
 			gs_matrix_push();
 			gs_matrix_mul(&matrices[0]);
-			obs_source_video_render(state.s[0]);
+			obs_source_video_render(state.s[0]); // scene
 			gs_matrix_pop();
 		}
 	}

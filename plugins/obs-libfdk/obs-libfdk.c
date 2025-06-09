@@ -290,6 +290,7 @@ static size_t libfdk_frame_size(void *data)
 	return enc->info.frameLength;
 }
 
+//whb:audioencoder libfdk_aac
 struct obs_encoder_info obs_libfdk_encoder = {
 	.id = "libfdk_aac",
 	.type = OBS_ENCODER_AUDIO,
