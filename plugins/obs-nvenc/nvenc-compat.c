@@ -295,6 +295,7 @@ static bool fake_encode_tex2(void *data, struct encoder_texture *texture, int64_
 	return true;
 }
 
+//whb:encoder compat_nvenc_264
 struct obs_encoder_info compat_h264_nvenc_info = {
 	.id = "jim_nvenc",
 	.codec = "h264",
@@ -310,6 +311,7 @@ struct obs_encoder_info compat_h264_nvenc_info = {
 };
 
 #ifdef ENABLE_HEVC
+//whb:encoder compat_nvenc_265
 struct obs_encoder_info compat_hevc_nvenc_info = {
 	.id = "jim_hevc_nvenc",
 	.codec = "hevc",
@@ -325,6 +327,7 @@ struct obs_encoder_info compat_hevc_nvenc_info = {
 };
 #endif
 
+//whb:encoder compat_nvenc_av1
 struct obs_encoder_info compat_av1_nvenc_info = {
 	.id = "jim_av1_nvenc",
 	.codec = "av1",
@@ -339,6 +342,7 @@ struct obs_encoder_info compat_av1_nvenc_info = {
 	.get_properties = av1_nvenc_properties,
 };
 
+//whb:encoder compat_nvenc_264
 struct obs_encoder_info compat_h264_nvenc_soft_info = {
 	.id = "obs_nvenc_h264_cuda",
 	.codec = "h264",

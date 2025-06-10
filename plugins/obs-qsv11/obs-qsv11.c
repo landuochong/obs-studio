@@ -1289,7 +1289,7 @@ static bool obs_qsv_encode_tex(void *data, struct encoder_texture *tex, int64_t 
 	return true;
 }
 
-//whb:encoder qsv_264
+//whb:encoder gpu qsv_264
 struct obs_encoder_info obs_qsv_encoder_tex = {
 	.id = "obs_qsv11",
 	.type = OBS_ENCODER_VIDEO,

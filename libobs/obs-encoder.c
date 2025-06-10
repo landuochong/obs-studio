@@ -99,7 +99,7 @@ static struct obs_encoder *create_encoder(const char *id, enum obs_encoder_type 
 		encoder->info = *ei;
 		encoder->orig_info = *ei;
 	}
-
+        //whb:encoder init
 	success = init_encoder(encoder, name, settings, hotkey_data);
 	if (!success) {
 		blog(LOG_ERROR, "creating encoder '%s' (%s) failed", name, id);
@@ -591,6 +591,7 @@ static inline bool obs_encoder_initialize_internal(obs_encoder_t *encoder)
 	if (encoder->orig_info.create) {
 		can_reroute = true;
 		encoder->info = encoder->orig_info;
+		//whb:调用编码器的create方法
 		encoder->context.data = encoder->orig_info.create(encoder->context.settings, encoder);
 		can_reroute = false;
 	}
