@@ -792,7 +792,7 @@ static bool send_video_header(struct rtmp_stream *stream, size_t idx)
 
 	if (!vencoder)
 		return false;
-
+        //whb:获取extraData
 	if (!obs_encoder_get_extra_data(vencoder, &header, &size))
 		return false;
 
@@ -802,6 +802,7 @@ static bool send_video_header(struct rtmp_stream *stream, size_t idx)
 		return false;
 
 	case CODEC_H264:
+	        //whb:解析header，获取sps，pps，填充到packet.data
 		packet.size = obs_parse_avc_header(&packet.data, header, size);
 		// Always send H.264 on track 0 as old style for compatibility.
 		if (idx == 0) {
@@ -811,12 +812,14 @@ static bool send_video_header(struct rtmp_stream *stream, size_t idx)
 		}
 	case CODEC_HEVC:
 #ifdef ENABLE_HEVC
+		//whb:解析header，获取vps,sps，pps，填充到packet.data
 		packet.size = obs_parse_hevc_header(&packet.data, header, size);
 		return send_packet_ex(stream, &packet, true, false, idx) >= 0;
 #else
 		return false;
 #endif
 	case CODEC_AV1:
+		//whb:解析header，获取av1header，填充到packet.data
 		packet.size = obs_parse_av1_header(&packet.data, header, size);
 		return send_packet_ex(stream, &packet, true, false, idx) >= 0;
 	}
@@ -838,6 +841,7 @@ static bool send_video_metadata(struct rtmp_stream *stream, size_t idx)
 
 	const struct video_output_info *info = video_output_get_info(video);
 	enum video_colorspace colorspace = info->colorspace;
+	//whb：数据不是PQ，HLG则返回
 	if (!(colorspace == VIDEO_CS_2100_PQ || colorspace == VIDEO_CS_2100_HLG))
 		return true;
 
@@ -938,7 +942,7 @@ static inline bool send_headers(struct rtmp_stream *stream)
 		obs_encoder_t *enc = obs_output_get_video_encoder2(stream->output, j);
 		if (!enc)
 			continue;
-
+                //第一次发送metadata，编码后发送video header
 		if (!send_video_metadata(stream, j) || !send_video_header(stream, j))
 			return false;
 	}

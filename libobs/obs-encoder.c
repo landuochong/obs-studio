@@ -480,6 +480,7 @@ obs_properties_t *obs_get_encoder_properties(const char *id)
 	return NULL;
 }
 
+//whb:获取编码器属性
 obs_properties_t *obs_encoder_properties(const obs_encoder_t *encoder)
 {
 	if (!obs_encoder_valid(encoder, "obs_encoder_properties"))
@@ -500,7 +501,7 @@ obs_properties_t *obs_encoder_properties(const obs_encoder_t *encoder)
 
 	return NULL;
 }
-
+//whb:设置编码器属性
 void obs_encoder_update(obs_encoder_t *encoder, obs_data_t *settings)
 {
 	if (!obs_encoder_valid(encoder, "obs_encoder_update"))
@@ -527,6 +528,7 @@ void obs_encoder_update(obs_encoder_t *encoder, obs_data_t *settings)
 	}
 }
 
+//whb:获取编码器额外数据
 bool obs_encoder_get_extra_data(const obs_encoder_t *encoder, uint8_t **extra_data, size_t *size)
 {
 	if (!obs_encoder_valid(encoder, "obs_encoder_get_extra_data"))
