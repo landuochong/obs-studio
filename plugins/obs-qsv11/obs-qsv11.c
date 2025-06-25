@@ -1172,9 +1172,9 @@ static void obs_qsv_setup_rois(struct obs_qsv *obsqsv)
 		return;
 
 	qsv_encoder_clear_roi(obsqsv->context);
-	/* Because we pass-through the ROIs more or less directly we need to
-	 * pass them in reverse order, so make a temporary copy and then use
-	 * that instead. */
+	/* Because we pass-through the ROIs more or less directly we need to pass them in reverse order,
+	 *  so make a temporary copy and then use that instead.
+	 * */
 	DARRAY(struct obs_encoder_roi) rois;
 	da_init(rois);
 
@@ -1301,7 +1301,7 @@ struct obs_encoder_info obs_qsv_encoder_tex = {
 	.encode_texture2 = obs_qsv_encode_tex,
 	.update = obs_qsv_update,
 	.get_properties = obs_qsv_props_h264,
-	.get_defaults = obs_qsv_defaults_h264_v1,
+	.get_defaults = obs_qsv_defaults_h264_v1,//获取默认参数
 	.get_extra_data = obs_qsv_extra_data,
 	.get_sei_data = obs_qsv_sei,
 	.get_video_info = obs_qsv_video_info,
@@ -1385,7 +1385,7 @@ struct obs_encoder_info obs_qsv_av1_encoder = {
 	.encode = obs_qsv_encode,
 	.update = obs_qsv_update,
 	.get_properties = obs_qsv_props_av1,
-	.get_defaults = obs_qsv_defaults_av1,
+	.get_defaults = obs_qsv_defaults_av1, //获取默认参数
 	.get_extra_data = obs_qsv_extra_data,
 	.get_video_info = obs_qsv_video_plus_hdr_info,
 	.caps = OBS_ENCODER_CAP_DYN_BITRATE | OBS_ENCODER_CAP_INTERNAL | OBS_ENCODER_CAP_ROI,

@@ -841,7 +841,7 @@ static bool send_video_metadata(struct rtmp_stream *stream, size_t idx)
 
 	const struct video_output_info *info = video_output_get_info(video);
 	enum video_colorspace colorspace = info->colorspace;
-	//whb：数据不是PQ，HLG则返回
+	//whb：数据如果不是PQ或HLG则返回， HDR streaming
 	if (!(colorspace == VIDEO_CS_2100_PQ || colorspace == VIDEO_CS_2100_HLG))
 		return true;
 
@@ -1015,7 +1015,7 @@ static int init_send(struct rtmp_stream *stream)
 			bfree(stream->write_buf);
 
 		int total_bitrate = 0;
-
+                //获取编码器参数，用于计算内存分配
 		for (size_t i = 0; i < MAX_OUTPUT_VIDEO_ENCODERS; i++) {
 			obs_encoder_t *vencoder = obs_output_get_video_encoder2(context, i);
 			if (!vencoder)
@@ -1081,13 +1081,13 @@ static int init_send(struct rtmp_stream *stream)
 	}
 
 	os_atomic_set_bool(&stream->active, true);
-
+        //发送meta数据
 	if (!send_meta_data(stream)) {
 		warn("Disconnected while attempting to send metadata");
 		set_output_error(stream);
 		return OBS_OUTPUT_DISCONNECTED;
 	}
-
+	//开始编码
 	obs_output_begin_data_capture(stream->output, 0);
 
 	return OBS_OUTPUT_SUCCESS;
@@ -1370,7 +1370,7 @@ static void *connect_thread(void *data)
 		return NULL;
 	}
 
-	// HDR streaming disabled for AV1
+	//whb：HDR streaming disabled for AV1
 	for (size_t i = 0; i < MAX_OUTPUT_VIDEO_ENCODERS; i++) {
 		if (stream->video_codec[i] && stream->video_codec[i] != CODEC_H264 &&
 		    stream->video_codec[i] != CODEC_HEVC) {
@@ -1402,12 +1402,15 @@ static bool rtmp_stream_start(void *data)
 {
 	struct rtmp_stream *stream = data;
 
+	//whb:检测编码器已创建
 	if (!obs_output_can_begin_data_capture(stream->output, 0))
 		return false;
+	//whb:初始化编码器
 	if (!obs_output_initialize_encoders(stream->output, 0))
 		return false;
 
 	os_atomic_set_bool(&stream->connecting, true);
+	//whb:开始连接
 	return pthread_create(&stream->connect_thread, NULL, connect_thread, stream) == 0;
 }
 

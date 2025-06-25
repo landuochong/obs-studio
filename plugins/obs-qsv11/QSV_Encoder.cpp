@@ -60,7 +60,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QSV_Encoder.h"
 #include "QSV_Encoder_Internal.h"
 #include "common_utils.h"
-#include <obs-module.h>
+#include <obs-module.h>  //for loglevel and roi
 #include <string>
 #include <atomic>
 

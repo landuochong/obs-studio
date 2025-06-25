@@ -156,6 +156,7 @@ static bool enum_luids(void *param, uint32_t idx, uint64_t luid)
 	return true;
 }
 
+//whb:设备检测,启动一个进程，需要调整
 void check_adapters(struct adapter_info *adapters, size_t *adapter_count)
 {
 	char *test_exe = os_get_executable_path_ptr("obs-qsv-test.exe");

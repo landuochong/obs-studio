@@ -446,6 +446,7 @@ static inline obs_data_t *get_defaults(const struct obs_encoder_info *info)
 	return settings;
 }
 
+//whb:获取默认配置
 obs_data_t *obs_encoder_defaults(const char *id)
 {
 	const struct obs_encoder_info *info = find_encoder(id);
@@ -460,6 +461,7 @@ obs_data_t *obs_encoder_get_defaults(const obs_encoder_t *encoder)
 	return get_defaults(&encoder->info);
 }
 
+//whb:获取编码器属性：编码器类型、编码器属性：码率，关键帧，延迟
 obs_properties_t *obs_get_encoder_properties(const char *id)
 {
 	const struct obs_encoder_info *ei = find_encoder(id);

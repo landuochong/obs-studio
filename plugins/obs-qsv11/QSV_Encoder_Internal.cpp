@@ -59,7 +59,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vpl/mfxstructures.h>
 #include <vpl/mfxvideo++.h>
 #include <vpl/mfxdispatcher.h>
-#include <obs-module.h>
+#include <obs-module.h> //只是log有关
 
 #define do_log(level, format, ...) blog(level, "[qsv encoder: '%s'] " format, "msdk_impl", ##__VA_ARGS__)
 
